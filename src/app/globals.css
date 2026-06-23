@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Share+Tech&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Geist:ital,wght@0,100..900;1,100..900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Bitcount+Prop+Single&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
@@ -18,7 +19,7 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
+    --background: #FAF9F5;
     --foreground: #ededed;
   }
 }
@@ -44,3 +45,82 @@ body {
 .montserrat {
   font-family: 'Montserrat', sans-serif;
 }
+
+.geist-font {
+  font-family: 'Geist', sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+@keyframes slowBounce {
+  0%, 100% {
+    transform: translateY(-10px);
+  }
+  50% {
+    transform: translateY(0);
+  }
+}
+
+.animate-slow-bounce {
+  animation: slowBounce 3s ease-in-out infinite;
+}
+
+
+@property --angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@keyframes spin-border {
+  from { --angle: 0deg; }
+  to   { --angle: 360deg; }
+}
+
+.voice-btn-wrapper {
+  padding: 2px;
+  border-radius: 9999px;
+  background: conic-gradient(
+    from var(--angle),
+    #f89e9e,
+    #f6df83,
+    #95f3b7,
+    #92bef4,
+    #f89e9e
+  );
+  animation: spin-border 3s linear infinite, slowBounce 3s ease-in-out infinite;
+  display: inline-block;
+  box-shadow:
+    0 0 8px #f8717166,
+    0 0 16px #60a5fa44;
+}
+
+@keyframes wave-letter {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-6px); }
+}
+
+.wave-text span {
+  display: inline-block;
+}
+
+.wave-text:hover span {
+  animation: wave-letter 2.4s ease-in-out infinite both;
+}
+
+.wave-text:hover span:nth-child(1)  { animation-delay: 0.00s; }
+.wave-text:hover span:nth-child(2)  { animation-delay: 0.12s; }
+.wave-text:hover span:nth-child(3)  { animation-delay: 0.24s; }
+.wave-text:hover span:nth-child(4)  { animation-delay: 0.36s; }
+.wave-text:hover span:nth-child(5)  { animation-delay: 0.48s; }
+.wave-text:hover span:nth-child(6)  { animation-delay: 0.60s; }
+.wave-text:hover span:nth-child(7)  { animation-delay: 0.72s; }
+.wave-text:hover span:nth-child(8)  { animation-delay: 0.84s; }
+.wave-text:hover span:nth-child(9)  { animation-delay: 0.96s; }
+.wave-text:hover span:nth-child(10) { animation-delay: 1.08s; }
+.wave-text:hover span:nth-child(11) { animation-delay: 1.20s; }
+.wave-text:hover span:nth-child(12) { animation-delay: 1.32s; }
+.wave-text:hover span:nth-child(13) { animation-delay: 1.44s; }
+.wave-text:hover span:nth-child(14) { animation-delay: 1.56s;}
