@@ -107,7 +107,7 @@ html {
 }
 
 .wave-text:hover span {
-  animation: wave-letter 2.4s ease-in-out infinite both;
+  animation: wave-letter 2.5s ease-in-out infinite both;
 }
 
 .wave-text:hover span:nth-child(1)  { animation-delay: 0.00s; }
