@@ -100,12 +100,12 @@ export default function About() {
 
   return (
     <section
-      id="About"
-      className="relative py-24 overflow-hidden"
-      style={{ 
-        background: "linear-gradient(to bottom, #FFFFFF 0%, #EDEAE4 300px, #EDEAE4 100%)" 
-      }}
-    >
+  id="About"
+  className="relative py-24 overflow-hidden"
+  style={{ 
+    background: "linear-gradient(to bottom, #FFFFFF 0%, #EDEAE4 300px, #EDEAE4 100%)" 
+  }}
+>
       <div 
         className="absolute -top-[200px] left-1/3 h-[400px] w-[500px] rounded-full bg-green-100/60 blur-[140px] pointer-events-none z-0 animate-pulse" 
       />
@@ -143,9 +143,9 @@ export default function About() {
           </motion.h2>
         </div>
 
-       {/* 4 Trait Blobs (Blur to Focus Animation) */}
+        {/* 4 Trait Blobs (Blur to Focus Animation) */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-20">
-          {traits.map(({ word, bg, desc }, i) => (
+          {traits.map(({ word, bg, desc, borderColor }, i) => (
             <motion.div
               key={word}
               custom={i}
@@ -153,48 +153,21 @@ export default function About() {
               initial="hidden"
               whileInView="show"
               viewport={{ once: true, margin: "-50px" }}
-              
-              // We trigger a "hover" state that gets passed down to our gradient child
-              whileHover="hover" 
-              
-              // Standard scale hover on the parent wrapper
-              className="relative rounded-3xl cursor-default transition-transform hover:scale-[1.05]"
+              whileHover={{borderColor: borderColor }}
+              className="rounded-3xl px-6 py-8 cursor-default shadow-md border border-transparent transition-transform hover:scale-[1.05]"
+              style={{ backgroundColor: bg }}
             >
-              
-              {/* ✨ THE RAINBOW GLOW (Sandwiched in the back) ✨ */}
-              <motion.div
-                variants={{
-                  hidden: { opacity: 0 }, 
-                  show: { opacity: 0 },   // Stays invisible normally
-                  hover: { 
-                    opacity: 0.8,         // Fades in on hover
-                    rotate: [0, 360]      // Spins in a full circle
-                  }
-                }}
-                transition={{ 
-                  opacity: { duration: 0.4 },
-                  rotate: { duration: 4, repeat: Infinity, ease: "linear" } // Spins forever while hovered
-                }}
-                // -inset-1 makes it slightly larger than the card, blur-xl gives it the soft glow
-                className="absolute -inset-1 rounded-3xl blur-xl bg-gradient-to-r from-pink-400 via-purple-400 to-indigo-400 z-0"
-              />
-
-              {/* 📦 THE ACTUAL CARD (Sits on top, blocking the middle of the glow) */}
-              <div 
-                className="relative h-full w-full rounded-3xl px-6 py-8 shadow-md border border-white/40 z-10"
-                style={{ backgroundColor: bg }}
-              >
-                <p className="bit-count text-2xl font-bold mb-2" style={{ color: "#1a1a1a" }}>
-                  {word}
-                </p>
-                <p className="open-sans text-[13px] leading-relaxed font-medium" style={{ color: "#44403C", opacity: 0.8 }}>
-                  {desc}
-                </p>
-              </div>
-
+              <p className="bit-count text-2xl font-bold mb-2" style={{ color: "#1a1a1a" }}>
+                {word}
+              </p>
+              <p className="open-sans text-[13px] leading-relaxed font-medium" style={{ color: "#44403C", opacity: 0.8 }}>
+                {desc}
+              </p>
             </motion.div>
           ))}
+
         </div>
+
         
         {/* Divider */}
         <motion.div 
