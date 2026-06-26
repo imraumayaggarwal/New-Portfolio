@@ -45,7 +45,7 @@ export default function Experience() {
   const fluidSpring = { type: "spring", stiffness: 200, damping: 20, mass: 0.8 };
 
   return (
-    <section id="Experience" className="relative py-32 overflow-hidden" style={{ backgroundColor: "#EDEAE4" }}>
+    <section id="Experience" className="relative pt-15 pb-2 overflow-hidden" style={{ backgroundColor: "#EDEAE4" }}>
       {/* Mesh Gradients connecting to previous sections */}
       <div className="absolute inset-0 z-0 opacity-40">
         <div className="absolute -top-[10%] -right-[10%] w-[600px] h-[600px] bg-red-200/60 rounded-full blur-[150px] animate-pulse" style={{ animationDuration: '10s' }} />
