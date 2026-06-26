@@ -1,143 +1,111 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
+import { useState } from "react";
 import Container from "../layout/Container";
 
 const fadeUp = (delay = 0) => ({
-  hidden: { opacity: 0, y: 24 },
+  hidden: { opacity: 0, y: 40 },
   show: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.7, ease: [0.25, 0.1, 0.25, 1], delay },
+    transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] as const, delay },
   },
 });
 
-const Tag = ({ text }: { text: string }) => (
-  <span className="montserrat text-[9px] uppercase tracking-[0.15em] text-zinc-400 border border-zinc-200 rounded-full px-3 py-1">
-    {text}
-  </span>
-);
-
 const experiences = [
   {
-    type: "Current · Internship",
-    role: "AI-Assisted Full Stack Developer",
-    company: "Technology Business Incubator · Graphic Era University",
-    date: "2025 – Present",
-    dateColor: "text-emerald-500 border-emerald-200",
-    description:
-      "Building AI-powered full stack applications at GEU's startup incubator — working at the intersection of LLMs, backend systems, and frontend interfaces.",
-    tags: ["Next.js", "FastAPI", "LLMs", "AI Integration"],
-    accent: "bg-emerald-400",
+    id: 1,
+    role: "AI / Full Stack Intern",
+    company: "TBI, Graphic Era",
+    date: "Present",
+    desc: "Developing AI-powered web applications by combining modern frontend technologies, scalable backend systems, and large language models. Working across the full lifecycle—from designing intuitive interfaces to integrating AI capabilities into production-ready products.",
+    tags: ["Next.js", "TypeScript", "Python", "LLMs"],
+    bg: "#DCFCE7",
+    text: "#14532d",
+    gradient: "linear-gradient(135deg, #10B981 0%, #047857 100%)",
   },
   {
-    type: "Completed · Internship",
-    role: "Data Analyst Associate Intern",
-    company: "Excelerate · Remote",
-    date: "Mar – Apr 2025",
-    dateColor: "text-zinc-400 border-zinc-200",
-    description:
-      "Transformed raw data into actionable insights. Built dashboards in Looker Studio, performed EDA, and developed data-driven presentations for stakeholders.",
-    tags: ["Data Analysis", "Looker Studio", "EDA", "Visualization"],
-    accent: "bg-blue-300",
-  },
-  {
-    type: "Hackathon · National Finals",
-    role: "Code for Bharat — Top 15 / 3000+",
-    company: "Microsoft Gurugram",
-    date: "2024",
-    dateColor: "text-zinc-400 border-zinc-200",
-    description:
-      "Built Simpl3fy — a personal finance management app — and reached the national finals at Microsoft's Gurugram office out of 3000+ registrations.",
-    tags: ["Simpl3fy", "Fintech", "React", "National Finals"],
-    accent: "bg-violet-300",
-  },
+    id: 2,
+    role: "Data Analyst Intern",
+    company: "Excelerate",
+    date: "Past",
+    desc: "Worked with structured datasets to extract actionable insights and support data-driven decision-making. Developed dashboards, cleaned data, and collaborated with cross-functional remote teams to present findings through clear visualizations.",
+    tags: ["Python", "Pandas", "JupyterLab", "SQL"],
+    bg: "#DBEAFE",
+    text: "#1e3a8a",
+    gradient: "linear-gradient(135deg, #3B82F6 0%, #1D4ED8 100%)",
+  }
 ];
 
 export default function Experience() {
+  const [activeExp, setActiveExp] = useState<number | null>(null); // Initialized to null
+  const [hoveredExp, setHoveredExp] = useState<number | null>(null);
+
+  const fluidSpring = { type: "spring", stiffness: 200, damping: 20, mass: 0.8 };
+
   return (
-    <section
-      id="Experience"
-      className="relative py-32 overflow-hidden"
-    >
-      {/* Atmosphere */}
-      <div className="absolute inset-0 -z-10">
-        <div className="absolute top-0 right-0 h-[500px] w-[500px] rounded-full bg-violet-50/50 blur-[180px]" />
-        <div className="absolute bottom-0 left-0 h-[500px] w-[500px] rounded-full bg-emerald-50/40 blur-[180px]" />
+    <section id="Experience" className="relative py-32 overflow-hidden" style={{ backgroundColor: "#EDEAE4" }}>
+      {/* Mesh Gradients connecting to previous sections */}
+      <div className="absolute inset-0 z-0 opacity-40">
+        <div className="absolute -top-[10%] -right-[10%] w-[600px] h-[600px] bg-red-200/60 rounded-full blur-[150px] animate-pulse" style={{ animationDuration: '10s' }} />
+        <div className="absolute top-[20%] -left-[10%] w-[700px] h-[700px] bg-green-100/70 rounded-full blur-[180px] animate-pulse" style={{ animationDuration: '15s' }} />
+        <div className="absolute bottom-[5%] right-[5%] w-[500px] h-[500px] bg-blue-100/60 rounded-full blur-[140px] animate-pulse" style={{ animationDuration: '12s' }} />
       </div>
 
-      <Container>
-
-        {/* Eyebrow */}
-        <motion.p
-          variants={fadeUp(0)}
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true }}
-          className="montserrat text-[10px] uppercase tracking-[0.3em] text-zinc-400 mb-10"
-        >
-          Experience
-        </motion.p>
-
-        {/* Cards — vertical stack */}
-        <div className="flex flex-col gap-4">
-          {experiences.map((exp, i) => (
-            <motion.div
-              key={exp.role}
-              variants={fadeUp(0.08 + i * 0.1)}
-              initial="hidden"
-              whileInView="show"
-              viewport={{ once: true }}
-              className="
-                group
-                relative
-                rounded-3xl
-                border border-zinc-100
-                bg-white/60
-                backdrop-blur-sm
-                p-8
-                hover:border-zinc-200
-                hover:shadow-sm
-                transition-all
-                duration-300
-                overflow-hidden
-              "
-            >
-              {/* Accent bar — left edge, colored per card */}
-              <div className={`absolute left-0 top-6 bottom-6 w-[3px] rounded-full ${exp.accent} opacity-60 group-hover:opacity-100 transition-opacity duration-300`} />
-
-              <div className="pl-4">
-                <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4 mb-4">
-                  <div>
-                    <p className="montserrat text-[9px] uppercase tracking-[0.25em] text-zinc-400 mb-2">
-                      {exp.type}
-                    </p>
-                    <h3 className="geist-font text-2xl font-medium text-gray-700 tracking-tight">
-                      {exp.role}
-                    </h3>
-                    <p className="open-sans text-sm text-zinc-400 mt-1">
-                      {exp.company}
-                    </p>
-                  </div>
-                  <span className={`montserrat text-[9px] uppercase tracking-[0.15em] border rounded-full px-3 py-1 whitespace-nowrap self-start ${exp.dateColor}`}>
-                    {exp.date}
-                  </span>
-                </div>
-
-                <p className="open-sans text-[14px] text-zinc-500 leading-[1.85] mb-5 max-w-2xl">
-                  {exp.description}
-                </p>
-
-                <div className="flex flex-wrap gap-2">
-                  {exp.tags.map((tag) => (
-                    <Tag key={tag} text={tag} />
-                  ))}
-                </div>
-              </div>
-            </motion.div>
-          ))}
+      <Container className="relative z-10">
+        <div className="max-w-3xl mb-24">
+          <motion.p variants={fadeUp(0)} initial="hidden" whileInView="show" viewport={{ once: true, margin: "-100px" }} className="montserrat text-[10px] font-bold uppercase tracking-[0.3em] mb-6 text-gray-400">
+            Experience
+          </motion.p>
+          <motion.h2 variants={fadeUp(0.1)} initial="hidden" whileInView="show" viewport={{ once: true, margin: "-100px" }} className="geist-font text-5xl md:text-6xl lg:text-7xl font-semibold leading-[1.05] tracking-[-0.04em] cursor-default text-gray-800">
+            The Journey <br /> <span className="text-gray-400">So far.</span>
+          </motion.h2>
         </div>
 
+        <div className="w-full border-t border-black/10">
+          {experiences.map((exp, i) => {
+            const isActive = activeExp === i;
+            const isHovered = hoveredExp === i && !isActive;
+
+            return (
+              <motion.div key={exp.id} layout onClick={() => setActiveExp(isActive ? null : i)} onMouseEnter={() => setHoveredExp(i)} onMouseLeave={() => setHoveredExp(null)} className="relative border-b border-black/10 cursor-pointer group" transition={fluidSpring}>
+                <motion.div className="absolute -inset-x-2 md:-inset-x-6 inset-y-1 z-0 shadow-lg border" initial={false} animate={{ backgroundColor: isActive ? exp.bg : "transparent", borderColor: isActive ? exp.bg : "transparent", borderRadius: isActive ? "2rem" : "0rem", opacity: isActive ? 1 : 0, scale: isActive ? 1 : 0.98 }} transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }} />
+                <div className="relative z-10 py-10 md:py-12 px-4 md:px-8">
+                  <motion.div layout className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <motion.h3 className="geist-font text-3xl md:text-5xl font-bold tracking-tight" animate={{ x: isHovered ? 12 : 0 }} style={{ backgroundImage: isHovered ? exp.gradient : "none", WebkitBackgroundClip: isHovered ? "text" : "initial", WebkitTextFillColor: isHovered ? "transparent" : (isActive ? exp.text : "#4B5563"), color: isActive ? exp.text : "#4B5563" }} transition={{ duration: 0.3, ease: "easeOut" }}>
+                      {exp.role}
+                    </motion.h3>
+                    <div className="flex items-center gap-6 mt-2 md:mt-0">
+                      <motion.p className="montserrat text-[11px] font-bold tracking-[0.2em] uppercase" animate={{ color: isActive ? exp.text : "#6B7280" }} transition={{ duration: 0.4 }}>{exp.company}</motion.p>
+                      <motion.div animate={{ rotate: isActive ? 180 : 0, backgroundColor: isActive ? exp.text : "transparent", color: isActive ? exp.bg : "#4B5563", borderColor: isActive ? exp.text : "#D1D5DB" }} className="w-10 h-10 rounded-full border flex items-center justify-center transition-colors duration-300">
+                        <span className="text-2xl font-light mb-1">{isActive ? "−" : "+"}</span>
+                      </motion.div>
+                    </div>
+                  </motion.div>
+                  <AnimatePresence initial={false}>
+                    {isActive && (
+                      <motion.div initial={{ height: 0, opacity: 0, y: -10, filter: "blur(4px)" }} animate={{ height: "auto", opacity: 1, y: 0, filter: "blur(0px)" }} exit={{ height: 0, opacity: 0, y: -10, filter: "blur(4px)", transition: { duration: 0.3 } }} transition={fluidSpring} className="overflow-hidden">
+                        <div className="pt-8 mt-6 border-t border-black/5 flex flex-col md:flex-row gap-8 md:gap-16">
+                          <div className="w-full md:w-3/4">
+                            <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15, ...fluidSpring }} className="open-sans text-[16px] md:text-[18px] leading-[1.8] font-medium mb-8" style={{ color: exp.text, opacity: 0.9 }}>{exp.desc}</motion.p>
+                            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25, ...fluidSpring }} className="flex flex-wrap gap-3">
+                              {exp.tags.map((tag) => <span key={tag} className="px-5 py-2 my-2 ml-2 rounded-full text-[11px] font-bold uppercase tracking-wider border hover:scale-105 transition-transform cursor-default bg-white/40 backdrop-blur-md" style={{ borderColor: exp.text, color: exp.text, opacity: 0.9 }}>{tag}</span>)}
+                            </motion.div>
+                          </div>
+                          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2, ...fluidSpring }} className="w-full md:w-1/4 md:text-right">
+                            <p className="montserrat text-[10px] uppercase tracking-[0.3em] font-bold" style={{ color: exp.text, opacity: 0.6 }}>Timeline</p>
+                            <p className="mt-2 geist-font text-xl font-semibold" style={{ color: exp.text }}>{exp.date}</p>
+                          </motion.div>
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+              </motion.div>
+            );
+          })}
+        </div>
       </Container>
     </section>
   );
