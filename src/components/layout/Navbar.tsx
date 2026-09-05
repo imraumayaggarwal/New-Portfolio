@@ -21,7 +21,7 @@ export default function Navbar() {
                         setActiveSection(entry.target.id);
                 })
             }, {
-                threshold: 0.5,
+                threshold: 0.4,
             }
         );
         sections.forEach((section) => observer.observe(section));
@@ -67,7 +67,7 @@ export default function Navbar() {
     return (
         <nav className={`fixed left-0 w-full z-50 transition-all duration-500 ease-out ${
             scrolled
-                ? "top-4 "
+                ? "top-2 "
                 : "top-0 shadow-xs"
             }`}
         >

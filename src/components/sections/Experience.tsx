@@ -1,11 +1,69 @@
 "use client";
 
-import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import Container from "../layout/Container";
+import {
+  SiNextdotjs,
+  SiTypescript,
+  SiFastapi,
+  SiPostgresql,
+  SiPython,
+  SiJupyter,
+  SiScikitlearn,
+  SiGooglegemini,
+  SiPandas,
+} from "react-icons/si";
+import { TbDatabase } from "react-icons/tb";
+import { IconType } from "react-icons";
+
+// Refined badges matched to your warm stone & pastel theme
+const tagIcons: Record<string, { icon: IconType; color: string; bg: string; border: string }> = {
+  "Next.js": { icon: SiNextdotjs, color: "#18181b", bg: "rgba(255, 255, 255, 0.75)", border: "#E4E4E7" },
+  "TypeScript": { icon: SiTypescript, color: "#1D4ED8", bg: "#DBEAFE", border: "#93C5FD" },
+  "FastAPI": { icon: SiFastapi, color: "#047857", bg: "#DCFCE7", border: "#86EFAC" },
+  "LLMs": { icon: SiGooglegemini, color: "#7C3AED", bg: "#F3E8FF", border: "#D8B4FE" },
+  "PostgreSQL": { icon: SiPostgresql, color: "#1E40AF", bg: "#E0E7FF", border: "#A5B4FC" },
+  "Python": { icon: SiPython, color: "#B45309", bg: "#FEF3C7", border: "#FDE68A" },
+  "JupyterLab": { icon: SiJupyter, color: "#C2410C", bg: "#FFEDD5", border: "#FDBA74" },
+  "EDA": { icon: SiPandas, color: "#BE185D", bg: "#FCE7F3", border: "#F472B6" },
+  "Scikit-learn": { icon: SiScikitlearn, color: "#C2410C", bg: "#FFEDD5", border: "#FB923C" },
+  "SQL": { icon: TbDatabase, color: "#0369A1", bg: "#E0F2FE", border: "#7DD3FC" },
+};
+
+const experiences = [
+  {
+    id: 1,
+    num: "[ 01 ]",
+    role: "AI Assisted Full Stack Intern",
+    company: "TBI, Graphic Era",
+    date: "June 2026 – August 2026",
+    desc: "Developed and deployed an AI-powered product management platform using Next.js, TypeScript, FastAPI, and PostgreSQL, implementing authentication, REST APIs, product CRUD, and a Google Gemini-powered description generator with prompt engineering.",
+    tags: ["Next.js", "TypeScript", "FastAPI", "LLMs", "PostgreSQL"],
+    orgColor: "#059669",
+    glowColor: "rgba(220, 252, 231, 0.75)",
+    // Vivid Forest Emerald -> Mint Sage
+    accentGradient: "linear-gradient(300deg, #064e3b 0%, #059669 45%, #34d399 100%)",
+  },
+  {
+    id: 2,
+    num: "[ 02 ]",
+    role: "Data Analyst Intern",
+    company: "Excelerate",
+    date: "March 2025 – April 2025",
+    desc: "Analyzed student engagement and churn through data cleaning, EDA, feature engineering, visualization, and predictive modeling, achieving 98% accuracy with an ensemble model and developing data-driven strategies to improve student retention.",
+    tags: ["Python", "JupyterLab", "EDA", "Scikit-learn", "SQL"],
+    orgColor: "#2563EB",
+    glowColor: "rgba(219, 234, 254, 0.75)",
+    // Midnight Sapphire -> Vivid Azure -> Cyan
+    accentGradient: "linear-gradient(300deg, #1e3a8a 0%, #2563eb 50%, #38bdf8 100%)",
+  },
+];
+
+const slowEase = [0.22, 1, 0.36, 1] as const;
 
 const fadeUp = (delay = 0) => ({
-  hidden: { opacity: 0, y: 40 },
+  hidden: { opacity: 0, y: 30 },
   show: {
     opacity: 1,
     y: 0,
@@ -13,90 +71,198 @@ const fadeUp = (delay = 0) => ({
   },
 });
 
-const experiences = [
-  {
-    id: 1,
-    role: "AI / Full Stack Intern",
-    company: "TBI, Graphic Era",
-    date: "Present",
-    desc: "Developing AI-powered web applications by combining modern frontend technologies, scalable backend systems, and large language models. Working across the full lifecycle—from designing intuitive interfaces to integrating AI capabilities into production-ready products.",
-    tags: ["Next.js", "TypeScript", "Python", "LLMs"],
-    bg: "#DCFCE7",
-    text: "#14532d",
-    gradient: "linear-gradient(135deg, #10B981 0%, #047857 100%)",
-  },
-  {
-    id: 2,
-    role: "Data Analyst Intern",
-    company: "Excelerate",
-    date: "Past",
-    desc: "Worked with structured datasets to extract actionable insights and support data-driven decision-making. Developed dashboards, cleaned data, and collaborated with cross-functional remote teams to present findings through clear visualizations.",
-    tags: ["Python", "Pandas", "JupyterLab", "SQL"],
-    bg: "#DBEAFE",
-    text: "#1e3a8a",
-    gradient: "linear-gradient(135deg, #3B82F6 0%, #1D4ED8 100%)",
-  }
-];
-
 export default function Experience() {
-  const [activeExp, setActiveExp] = useState<number | null>(null); // Initialized to null
-  const [hoveredExp, setHoveredExp] = useState<number | null>(null);
-
-  const fluidSpring = { type: "spring", stiffness: 200, damping: 20, mass: 0.8 };
+  const [hoveredExp, setHoveredExp] = useState<number | null>(0);
 
   return (
-    <section id="Experience" className="relative pt-15 pb-2 overflow-hidden" style={{ backgroundColor: "#EDEAE4" }}>
-      {/* Mesh Gradients connecting to previous sections */}
-      <div className="absolute inset-0 z-0 opacity-40">
-        <div className="absolute -top-[10%] -right-[10%] w-[600px] h-[600px] bg-red-200/60 rounded-full blur-[150px] animate-pulse" style={{ animationDuration: '10s' }} />
-        <div className="absolute top-[20%] -left-[10%] w-[700px] h-[700px] bg-green-100/70 rounded-full blur-[180px] animate-pulse" style={{ animationDuration: '15s' }} />
-        <div className="absolute bottom-[5%] right-[5%] w-[500px] h-[500px] bg-blue-100/60 rounded-full blur-[140px] animate-pulse" style={{ animationDuration: '12s' }} />
-      </div>
+    <section
+      id="Experience"
+      className="relative py-28 overflow-hidden"
+      style={{
+        background: "linear-gradient(to bottom, #EDEAE4 0%, #E7E3DC 50%, #EDEAE4 100%)",
+      }}
+    >
+      {/* Organic Mesh Blur Orbs matching Hero & About */}
+      <div
+        className="absolute -top-24 -left-20 h-[500px] w-[500px] rounded-full bg-red-200/50 blur-[150px] pointer-events-none z-0 animate-pulse"
+        style={{ animationDuration: "12s" }}
+      />
+      <div
+        className="absolute top-1/3 -right-24 h-[550px] w-[550px] rounded-full bg-blue-100/60 blur-[160px] pointer-events-none z-0 animate-pulse"
+        style={{ animationDuration: "14s" }}
+      />
+      <div
+        className="absolute -bottom-20 left-1/4 h-[450px] w-[450px] rounded-full bg-green-100/60 blur-[140px] pointer-events-none z-0 animate-pulse"
+        style={{ animationDuration: "16s" }}
+      />
 
       <Container className="relative z-10">
-        <div className="max-w-3xl mb-24">
-          <motion.p variants={fadeUp(0)} initial="hidden" whileInView="show" viewport={{ once: true, margin: "-100px" }} className="montserrat text-[10px] font-bold uppercase tracking-[0.3em] mb-6 text-gray-400">
-            Experience
+        {/* Section Header */}
+        <div className="max-w-3xl mb-16">
+          <motion.p
+            variants={fadeUp(0)}
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true, margin: "-80px" }}
+            className="montserrat text-[10px] font-bold uppercase tracking-[0.3em] mb-5 text-[#9CA3AF]"
+          >
+            INTERNSHIPS
           </motion.p>
-          <motion.h2 variants={fadeUp(0.1)} initial="hidden" whileInView="show" viewport={{ once: true, margin: "-100px" }} className="geist-font text-5xl md:text-6xl lg:text-7xl font-semibold leading-[1.05] tracking-[-0.04em] cursor-default text-gray-800">
-            The Journey <br /> <span className="text-gray-400">So far.</span>
+
+          <motion.h2
+            variants={fadeUp(0.2)}
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true, margin: "-80px" }}
+            className="bit-count text-5xl md:text-6xl lg:text-7xl font-semibold leading-[1.05] tracking-[-0.04em] cursor-default text-[#1a1a1a]"
+          >
+            The Journey <br />
+            <span className="text-[#A8A29E]">So far.</span>
           </motion.h2>
         </div>
 
-        <div className="w-full border-t border-black/10">
-          {experiences.map((exp, i) => {
-            const isActive = activeExp === i;
-            const isHovered = hoveredExp === i && !isActive;
+        {/* Experience Rows */}
+        <div className="w-full border-t border-[#1a1a1a]/15 flex flex-col">
+          {experiences.map((exp) => {
+            const isHovered = hoveredExp === exp.id;
 
             return (
-              <motion.div key={exp.id} layout onClick={() => setActiveExp(isActive ? null : i)} onMouseEnter={() => setHoveredExp(i)} onMouseLeave={() => setHoveredExp(null)} className="relative border-b border-black/10 cursor-pointer group" transition={fluidSpring}>
-                <motion.div className="absolute -inset-x-2 md:-inset-x-6 inset-y-1 z-0 shadow-lg border" initial={false} animate={{ backgroundColor: isActive ? exp.bg : "transparent", borderColor: isActive ? exp.bg : "transparent", borderRadius: isActive ? "2rem" : "0rem", opacity: isActive ? 1 : 0, scale: isActive ? 1 : 0.98 }} transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }} />
-                <div className="relative z-10 py-10 md:py-12 px-4 md:px-8">
-                  <motion.div layout className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                    <motion.h3 className="geist-font text-3xl md:text-5xl font-bold tracking-tight" animate={{ x: isHovered ? 12 : 0 }} style={{ backgroundImage: isHovered ? exp.gradient : "none", WebkitBackgroundClip: isHovered ? "text" : "initial", WebkitTextFillColor: isHovered ? "transparent" : (isActive ? exp.text : "#4B5563"), color: isActive ? exp.text : "#4B5563" }} transition={{ duration: 0.3, ease: "easeOut" }}>
-                      {exp.role}
-                    </motion.h3>
-                    <div className="flex items-center gap-6 mt-2 md:mt-0">
-                      <motion.p className="montserrat text-[11px] font-bold tracking-[0.2em] uppercase" animate={{ color: isActive ? exp.text : "#6B7280" }} transition={{ duration: 0.4 }}>{exp.company}</motion.p>
-                      <motion.div animate={{ rotate: isActive ? 180 : 0, backgroundColor: isActive ? exp.text : "transparent", color: isActive ? exp.bg : "#4B5563", borderColor: isActive ? exp.text : "#D1D5DB" }} className="w-10 h-10 rounded-full border flex items-center justify-center transition-colors duration-300">
-                        <span className="text-2xl font-light mb-1">{isActive ? "−" : "+"}</span>
-                      </motion.div>
+              <motion.div
+                key={exp.id}
+                layout="position"
+                onMouseEnter={() => setHoveredExp(exp.id)}
+                onMouseLeave={() => setHoveredExp(null)}
+                className="relative border-b border-[#1a1a1a]/15 cursor-pointer overflow-hidden group"
+                transition={{ duration: 0.65, ease: slowEase }}
+              >
+                {/* Subtle Hover Backdrop Highlight */}
+                <motion.div
+                  className="absolute inset-0 pointer-events-none -z-10 blur-xl"
+                  initial={false}
+                  animate={{
+                    opacity: isHovered ? 1 : 0,
+                    backgroundColor: isHovered ? exp.glowColor : "transparent",
+                  }}
+                  transition={{ duration: 0.7, ease: slowEase }}
+                />
+
+                <div className="py-8 md:py-8 px-2 md:px-4 relative z-10">
+                  {/* Top Bar: Title & Organization */}
+                  <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
+                    <div className="flex items-baseline gap-4 md:gap-8">
+                      <span className="montserrat text-xs tracking-widest text-[#9CA3AF] transition-colors duration-300 group-hover:text-[#1a1a1a]">
+                        {exp.num}
+                      </span>
+
+                      <motion.h3
+                        animate={{ x: isHovered ? 10 : 0 }}
+                        transition={{ duration: 0.1, ease: slowEase }}
+                        className="bit-count text-2xl md:text-3xl lg:text-4xl font-semibold tracking-tight transition-all duration-300"
+                        style={{
+                          backgroundImage: isHovered ? exp.accentGradient : "none",
+                          WebkitBackgroundClip: isHovered ? "text" : "initial",
+                          WebkitTextFillColor: isHovered ? "transparent" : "#1a1a1a",
+                          color: isHovered ? "transparent" : "#1a1a1a",
+                        }}
+                      >
+                        {exp.role}
+                      </motion.h3>
                     </div>
-                  </motion.div>
+
+                    <div className="flex items-center gap-4 pl-8 md:pl-0">
+                      <div className="text-right">
+                        <motion.p
+                          animate={{ color: isHovered ? exp.orgColor : "#44403C" }}
+                          transition={{ duration: 0.4, ease: slowEase }}
+                          className="montserrat text-xs md:text-sm font-bold uppercase tracking-[0.12em] transition-colors"
+                        >
+                          {exp.company}
+                        </motion.p>
+                        <p className="montserrat text-[10px] text-[#78716C] tracking-wide mt-0.5">
+                          {exp.date}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Expandable Drawer */}
                   <AnimatePresence initial={false}>
-                    {isActive && (
-                      <motion.div initial={{ height: 0, opacity: 0, y: -10, filter: "blur(4px)" }} animate={{ height: "auto", opacity: 1, y: 0, filter: "blur(0px)" }} exit={{ height: 0, opacity: 0, y: -10, filter: "blur(4px)", transition: { duration: 0.3 } }} transition={fluidSpring} className="overflow-hidden">
-                        <div className="pt-8 mt-6 border-t border-black/5 flex flex-col md:flex-row gap-8 md:gap-16">
-                          <div className="w-full md:w-3/4">
-                            <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15, ...fluidSpring }} className="open-sans text-[16px] md:text-[18px] leading-[1.8] font-medium mb-8" style={{ color: exp.text, opacity: 0.9 }}>{exp.desc}</motion.p>
-                            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25, ...fluidSpring }} className="flex flex-wrap gap-3">
-                              {exp.tags.map((tag) => <span key={tag} className="px-5 py-2 my-2 ml-2 rounded-full text-[11px] font-bold uppercase tracking-wider border hover:scale-105 transition-transform cursor-default bg-white/40 backdrop-blur-md" style={{ borderColor: exp.text, color: exp.text, opacity: 0.9 }}>{tag}</span>)}
-                            </motion.div>
+                    {isHovered && (
+                      <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{
+                          height: "auto",
+                          opacity: 1,
+                          transition: {
+                            height: { duration: 0.85, ease: slowEase },
+                            opacity: { duration: 0.5, delay: 0.15, ease: slowEase },
+                          },
+                        }}
+                        exit={{
+                          height: 0,
+                          opacity: 0,
+                          transition: {
+                            height: { duration: 0.85, ease: slowEase },
+                            opacity: { duration: 0.25 },
+                          },
+                        }}
+                        className="overflow-hidden"
+                      >
+                        <div className="pt-6 pb-6 mt-4 pl-8 md:pl-16 max-w-3xl border-t border-[#1a1a1a]/10">
+                          {/* Description in open-sans */}
+                          <motion.p
+                            initial={{ y: 10, opacity: 0 }}
+                            animate={{ y: 0, opacity: 1 }}
+                            transition={{ duration: 0.45, delay: 0.15, ease: slowEase }}
+                            className="open-sans text-sm md:text-[15px] leading-[1.8] text-[#44403C] font-normal mb-6"
+                          >
+                            {exp.desc}
+                          </motion.p>
+
+                          {/* Tech Blobs */}
+                          <div className="flex flex-wrap items-center gap-2.5">
+                            {exp.tags.map((tag, tagIndex) => {
+                              const meta = tagIcons[tag];
+                              const IconComponent = meta?.icon;
+
+                              return (
+                                <motion.div
+                                  key={tag}
+                                  initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                                  transition={{
+                                    duration: 0.4,
+                                    delay: 0.2 + tagIndex * 0.05,
+                                    ease: slowEase,
+                                  }}
+                                  whileHover={{
+                                    scale: 1.06,
+                                    borderColor: meta?.color || "#1a1a1a",
+                                    boxShadow: "0 4px 14px -2px rgba(0,0,0,0.06)",
+                                    transition: { duration: 0.2 },
+                                  }}
+                                  className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border shadow-sm cursor-default origin-center transition-all"
+                                  style={{
+                                    backgroundColor: meta?.bg || "#FFFFFF",
+                                    borderColor: meta?.border || "#E7E5E4",
+                                  }}
+                                >
+                                  {IconComponent && (
+                                    <IconComponent
+                                      className="text-xs"
+                                      style={{ color: meta?.color || "#1a1a1a" }}
+                                    />
+                                  )}
+                                  <span
+                                    className="montserrat text-[11px] font-bold tracking-wide"
+                                    style={{ color: meta?.color || "#1a1a1a" }}
+                                  >
+                                    {tag}
+                                  </span>
+                                </motion.div>
+                              );
+                            })}
                           </div>
-                          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2, ...fluidSpring }} className="w-full md:w-1/4 md:text-right">
-                            <p className="montserrat text-[10px] uppercase tracking-[0.3em] font-bold" style={{ color: exp.text, opacity: 0.6 }}>Timeline</p>
-                            <p className="mt-2 geist-font text-xl font-semibold" style={{ color: exp.text }}>{exp.date}</p>
-                          </motion.div>
                         </div>
                       </motion.div>
                     )}

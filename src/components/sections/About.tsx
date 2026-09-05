@@ -100,12 +100,12 @@ export default function About() {
 
   return (
     <section
-  id="About"
-  className="relative py-24 overflow-hidden"
-  style={{ 
-    background: "linear-gradient(to bottom, #FFFFFF 0%, #EDEAE4 300px, #EDEAE4 100%)" 
-  }}
->
+      id="About"
+      className="relative py-24 overflow-hidden"
+      style={{ 
+        background: "linear-gradient(to bottom, #FFFFFF 0%, #EDEAE4 300px, #EDEAE4 100%)" 
+      }}
+    >
       <div 
         className="absolute -top-[200px] left-1/3 h-[400px] w-[500px] rounded-full bg-green-100/60 blur-[140px] pointer-events-none z-0 animate-pulse" 
       />
@@ -152,7 +152,7 @@ export default function About() {
               variants={blurReveal}
               initial="hidden"
               whileInView="show"
-              viewport={{ once: true, margin: "-50px" }}
+              viewport={{ once: false, margin: "-50px" }}
               whileHover={{borderColor: borderColor }}
               className="rounded-3xl px-6 py-8 cursor-default shadow-md border border-transparent transition-transform hover:scale-[1.05]"
               style={{ backgroundColor: bg }}
