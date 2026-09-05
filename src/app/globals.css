@@ -124,3 +124,15 @@ html {
 .wave-text:hover span:nth-child(12) { animation-delay: 1.32s; }
 .wave-text:hover span:nth-child(13) { animation-delay: 1.44s; }
 .wave-text:hover span:nth-child(14) { animation-delay: 1.56s;}
+
+@keyframes lineBoil {
+  0%   { filter: url(#boil-1); transform: translate(0px, 0px) rotate(0deg); }
+  33%  { filter: url(#boil-2); transform: translate(-1px, 1px) rotate(-0.5deg); }
+  66%  { filter: url(#boil-3); transform: translate(1px, -0.5px) rotate(0.5deg); }
+  100% { filter: url(#boil-1); transform: translate(0px, 0px) rotate(0deg); }
+}
+
+.animate-line-boil {
+  /* steps(1) forces that crunchy stop-motion 6fps to 8fps cadence */
+  animation: lineBoil 0.35s steps(1) infinite;
+}
