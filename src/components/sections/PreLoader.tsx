@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { motion, useScroll, useTransform, useSpring } from "framer-motion";
+import { motion, useMotionValue, useSpring, useScroll, useTransform } from "framer-motion";
 import Image from "next/image";
 
 const ultraFluidEase = [0.85, 0, 0.15, 1] as const;
@@ -13,18 +13,44 @@ interface PreloaderProps {
   onRestore?: () => void;
 }
 
-export default function Preloader({ isDismissing, onDismiss, onRestore }: PreloaderProps) {
+export default function Preloader({
+  isDismissing,
+  onDismiss,
+  onRestore,
+}: PreloaderProps) {
   const [hasInteracted, setHasInteracted] = useState(false);
 
-  // Subtle scroll sink: moves down only 14px over 120px of scroll
-  const { scrollY } = useScroll();
-  const rawScrollY = useTransform(scrollY, [0, 120], [0, 14]);
-  // Gentle damping creates a slower, weightier glide on scroll
-  const scrollYCard = useSpring(rawScrollY, { stiffness: 90, damping: 24 });
+  // MOUSE-DRIVEN RADIAL TINT
+  const mouseX = useMotionValue(-500);
+  const mouseY = useMotionValue(-500);
+  const smoothMouseX = useSpring(mouseX, { stiffness: 180, damping: 25 });
+  const smoothMouseY = useSpring(mouseY, { stiffness: 180, damping: 25 });
 
   useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      mouseX.set(e.clientX);
+      mouseY.set(e.clientY);
+    };
+
+    if (!isDismissing) {
+      window.addEventListener("mousemove", handleMouseMove);
+    }
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+    };
+  }, [isDismissing, mouseX, mouseY]);
+
+  // SCROLL-DRIVEN CARD MOVEMENT
+  const { scrollY } = useScroll();
+  const rawScrollY = useTransform(scrollY, [0, 120], [0, 14]);
+  const scrollYCard = useSpring(rawScrollY, { stiffness: 90, damping: 24 });
+
+  // BODY SCROLL LOCK
+  useEffect(() => {
     document.body.style.overflow = isDismissing ? "" : "hidden";
-    return () => { document.body.style.overflow = ""; };
+    return () => {
+      document.body.style.overflow = "";
+    };
   }, [isDismissing]);
 
   const handleDismiss = () => {
@@ -87,8 +113,34 @@ export default function Preloader({ isDismissing, onDismiss, onRestore }: Preloa
           delay: isDismissing ? 0.05 : 0,
           ease: hasInteracted && !isDismissing ? restoreEase : ultraFluidEase,
         }}
+        style={{
+          // Remains active during both expand and dismiss transitions
+          WebkitMaskImage:
+            isDismissing || hasInteracted
+              ? "linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.15) 20px, rgba(0,0,0,0.7) 50px, black 80px)"
+              : undefined,
+          maskImage:
+            isDismissing || hasInteracted
+              ? "linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.15) 20px, rgba(0,0,0,0.7) 50px, black 80px)"
+              : undefined,
+        }}
         className="fixed inset-0 z-[100] bg-[#f2f2f2] overflow-hidden select-none pointer-events-none"
       >
+        {/* TOP-EDGE HEAVY BLUR DIFFUSER (PERSISTENT DURING EXPAND & DISMISS) */}
+        {(isDismissing || hasInteracted) && (
+          <div
+            aria-hidden="true"
+            className="absolute top-0 inset-x-0 h-16 pointer-events-none z-40 backdrop-blur-xl blur-lg bg-[#f2f2f2]/40 [mask-image:linear-gradient(to_bottom,black_20%,transparent_100%)] [WebkitMaskImage:linear-gradient(to_bottom,black_20%,transparent_100%)]"
+          />
+        )}
+
+        {/* RADIAL TINT POINTER FOLLOWER */}
+        <motion.div
+          style={{ x: smoothMouseX, y: smoothMouseY }}
+          className="absolute -top-[450px] -left-[450px] w-[900px] h-[900px] rounded-full pointer-events-none z-0 mix-blend-multiply bg-[radial-gradient(circle,rgba(56,189,248,0.08)_0%,rgba(14,116,144,0.04)_40%,transparent_65%)] blur-[80px]"
+        />
+
+        {/* TOP DOWN-CHEVRON BUTTON */}
         <motion.button
           onClick={handleDismiss}
           initial={{ opacity: 0, y: -20 }}
@@ -110,6 +162,7 @@ export default function Preloader({ isDismissing, onDismiss, onRestore }: Preloa
           </motion.svg>
         </motion.button>
 
+        {/* "I AM" + RAUMAY AGGARWAL */}
         <motion.div
           initial={{ y: "0vh" }}
           animate={{ y: "-18vh" }}
@@ -125,7 +178,7 @@ export default function Preloader({ isDismissing, onDismiss, onRestore }: Preloa
               initial={{ y: "100%", opacity: 0 }}
               animate={{ y: "0%", opacity: 1 }}
               transition={{ duration: hasInteracted ? 0.5 : 1.2, delay: hasInteracted ? 0 : 0.6, ease: restoreEase }}
-              className="text-[0.9rem] sm:text-[1.05rem] tracking-[0.38em] text-zinc-500 uppercase font-medium"
+              className="text-[0.9rem] sm:text-[1.2rem] tracking-[0.38em] text-zinc-500 uppercase font-medium"
             >
               I am
             </motion.p>

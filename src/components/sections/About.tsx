@@ -2,6 +2,7 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
+import Image from "next/image";
 import Container from "../layout/Container";
 
 // Standard graceful fade up for text
@@ -115,32 +116,54 @@ export default function About() {
       />
 
       <Container className="relative z-10">
-        {/* Intro Text Group */}
-        <div className="max-w-3xl mb-16">
-          <motion.p
-            variants={fadeUp(0)}
-            initial="hidden"
-            whileInView="show"
-            viewport={{ once: true, margin: "-100px" }}
-            className="montserrat text-[10px] font-bold uppercase tracking-[0.3em] mb-6"
-            style={{ color: "#9CA3AF" }}
-          >
-            About
-          </motion.p>
+        {/* Intro Group: Text on Left, Lappy Image on Right */}
+        <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center mb-12">
+          {/* Left: Heading Group */}
+          <div className="max-w-2xl">
+            <motion.p
+              variants={fadeUp(0)}
+              initial="hidden"
+              whileInView="show"
+              viewport={{ once: true, margin: "-100px" }}
+              className="montserrat text-[10px] font-bold uppercase tracking-[0.3em] mb-6"
+              style={{ color: "#9CA3AF" }}
+            >
+              About
+            </motion.p>
 
-          <motion.h2
-            variants={fadeUp(0.1)}
+            <motion.h2
+              variants={fadeUp(0.1)}
+              initial="hidden"
+              whileInView="show"
+              viewport={{ once: true, margin: "-100px" }}
+              className="bit-count text-4xl md:text-5xl lg:text-6xl font-semibold leading-[1.05] tracking-[-0.04em] text-shadow-md cursor-default"
+              style={{ color: "#1a1a1a" }}
+            >
+              I build things <br />
+              people actually use.
+              <br />
+              <span style={{ color: "#A8A29E" }}>Everything else is practice.</span>
+            </motion.h2>
+          </div>
+
+          {/* Right: Lappy Image */}
+          <motion.div
+            variants={fadeUp(0.4)}
             initial="hidden"
             whileInView="show"
-            viewport={{ once: true, margin: "-100px" }}
-            className="bit-count text-5xl md:text-6xl lg:text-7xl font-semibold leading-[1.05] tracking-[-0.04em] text-shadow-md cursor-default"
-            style={{ color: "#1a1a1a" }}
+            viewport={{ once: false, margin: "-150px" }}
+            className="relative flex justify-center lg:justify-center"
           >
-            I build things <br />
-            people actually use.
-            <br />
-            <span style={{ color: "#A8A29E" }}>Everything else is practice.</span>
-          </motion.h2>
+            <div className="relative w-[320px] h-[320px] sm:w-[380px] sm:h-[380px]">
+              <Image
+                src="/lappy.png"
+                alt="Laptop illustration"
+                fill
+                priority
+                className="object-contain drop-shadow-xl select-none pointer-events-none scale-130"
+              />
+            </div>
+          </motion.div>
         </div>
 
         {/* 4 Trait Blobs (Blur to Focus Animation) */}
@@ -169,7 +192,7 @@ export default function About() {
         </div>
 
         
-        {/* Divider */}
+        {/* Divider
         <motion.div 
           initial={{ scaleX: 0, opacity: 0 }}
           whileInView={{ scaleX: 1, opacity: 1 }}
@@ -177,7 +200,7 @@ export default function About() {
           transition={{ duration: 1, ease: "easeInOut" }}
           className="h-px w-full mb-12 origin-left" 
           style={{ backgroundColor: "#D6D3CC" }} 
-        />
+        /> */}
 
         {/* Carousel Header */}
         <motion.div
